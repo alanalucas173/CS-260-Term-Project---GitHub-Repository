@@ -5,7 +5,7 @@ using namespace std;
 
 class Customer {
 private:
-	string fname, lname, address, email; 
+	string fname, lname, address, email;
 	double phone;
 public:
 	Customer()
@@ -14,7 +14,7 @@ public:
 		lname = "";
 		address = "";
 		email = "";
-		phone = "";
+		phone = 0;
 	}
 	Customer(string _fname, string _lname, string _address, string _email, double _phone)
 	{
@@ -32,7 +32,7 @@ public:
 		email = _email;
 		phone = _phone;
 	}
-	
+
 	//Setters
 	void setFname(string _fname)
 	{
@@ -96,7 +96,7 @@ public:
 	}
 };
 
-class Account : public Customer{
+class Account : public Customer {
 private:
 	int ID;
 	double balance;
@@ -106,24 +106,27 @@ private:
 
 public:
 	//default
-	Account():Customer()
+	Account() :Customer()
 	{
 		ID = 0;
 		balance = 0;
 	}
 
-	Account(int ID, double balance, Customer accountCustomer) : Customer (string _fname, string _lname, string _address, string _email, double _phone)
+	Account(string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance) : Customer( _fname,  _lname,  _address,  _email,  _phone)
 	{
 		ID = 0;
 		balance = 0;
 		//accountCustomer.setCustomer() idr how to do this
 	}
-	Account
-
+	//getter
+	double getBalance() const 
+	{
+		return balance;
+	}
 	//Functions
 	void withdrawal(double _withdrawalAmmount)
 	{
-		if (_withdrawalAmmount < 0 )
+		if (_withdrawalAmmount < 0)
 		{
 			cout << "Not a valid withdrawal ammount, please try again... " << endl;
 			cout << "=========================================================================================================" << endl << endl;
@@ -158,21 +161,54 @@ public:
 	}
 	void printInfo()
 	{
-		Customer : printInfo();
+	Customer: printInfo();
 		cout << "Account ID Number: " << ID << endl;
 		cout << "Balance: $" << balance << endl;
 		cout << "Number of withdrawals: " << withdrawals << endl;
 		cout << "Number of deposits: " << deposits << endl;
 	}
 };
-int Account :: withdrawals = 0;
-int Account :: deposits = 0;
+//whats this for?
+int Account::withdrawals = 0; 
+int Account::deposits = 0;
 
 class CheckingAccount : public Account {
 private:
 	double overDraftLimit;
 public:
-	CheckingAccount(double overDraftLimit)
+	CheckingAccount():Account()
+	{
+		overDraftLimit = 0;
+
+	}
+	CheckingAccount(string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance, double _overDraftLimit): Account( _fname,  _lname,  _address,  _email, _phone, _ID,  _balance)
+	{
+		overDraftLimit = _overDraftLimit;
+	}
+	//not sure how to overload base class 
+	void withdrawals(double _withdrawalAmount) override
+	{
+
+	}
+};
+
+class SavingAccount : public Account{
+private:
+	double interestRate;
+public:
+	SavingAccount() :Account()
+	{
+		interestRate = 0;
+	}
+	SavingAccount(string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance, double _interestRate) : Account(_fname, _lname, _address, _email, _phone, _ID, _balance, _interestRate)
+	{
+		interestRate = _interestRate;
+	}
+	double payInterest()
+	{
+		//somehow get that balance from Account 
+	double interest = interestRate * Account:getBalance();
+	}
 };
 
 int main()
