@@ -3,11 +3,13 @@
 
 using namespace std;
 
+//This takes customer information (name, address, email, phone)
 class Customer {
 private:
 	string fname, lname, address, email;
 	double phone;
 public:
+	//default
 	Customer()
 	{
 		fname = "";
@@ -97,6 +99,9 @@ public:
 	}
 };
 
+//makes an account(ID and balance) with the customers information
+//also withdraw and deposit 
+//has Customer accountCustomer
 class Account : public Customer {
 private:
 	int ID;
@@ -174,6 +179,7 @@ public:
 int Account::withdrawals = 0;
 int Account::deposits = 0;
 
+//pulls from account  
 class CheckingAccount : public Account {
 private:
 	double overDraftLimit;
@@ -305,6 +311,8 @@ int main()
 {
 	char option;
 	cout << "Log in (L) or Create account (C)";
+	//using files????
+	// we can add accounts username and password to save account information 
 	cin >> option;
 	if (option != 'L', 'C', 'c', 'l')
 	{
@@ -321,7 +329,11 @@ int main()
 	}
 
 	//create menu or call menu 
+	// 1. select account 
+	// 2. exit
 
+	//depending on the account
+	//deposit, withdraw, edit info, view account
 
 	system("Pause");
 	return 0;
