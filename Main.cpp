@@ -202,7 +202,7 @@ public:
 	{
 		interestRate = 0;
 	}
-	SavingAccount(string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance, double _interestRate) 
+	SavingAccount(string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance, double _interestRate)
 	{
 		accountCustomer.setCustomer(_fname, _lname, _address, _email, _phone);
 
@@ -262,8 +262,8 @@ class createAccount : public Account
 		cout << "Enter Email: ";
 		cin >> email;
 
-		
-		Account customer(fName, lName, addr, email, phone, id,bal);
+
+		Account customer(fName, lName, addr, email, phone, id, bal);
 		//Account* acc = CreateAccount::createCheckingAccount(id, bal, customer);
 		cout << "Checking Account Created Successfully!" << endl;
 		//acc->PrintInfo();
@@ -303,18 +303,24 @@ class createAccount : public Account
 
 int main()
 {
+	char option;
+	cout << "Log in (L) or Create account (C)";
+	cin >> option;
+	if (option != 'L', 'C', 'c', 'l')
+	{
+		cout << "Not a valid option" << endl;
+		cout << "Log in (L) or Create account (C)";
+	}
+	else if (option == 'L', 'l')
+	{
+		//create class to log in
+	}
+	else if (option == 'c', 'C')
+	{
+		//create class to create accputn 
+	}
 
-
-
-
-
-
-
-
-
-
-
-
+	//create menu or call menu 
 
 
 	system("Pause");
