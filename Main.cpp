@@ -125,6 +125,11 @@ public:
 		balance = 0;
 		//accountCustomer.setCustomer() idr how to do this
 	}
+	//setter
+	void setBalance(double _balance)
+	{
+		balance = _balance;
+	}
 	//getter
 	double getBalance() const
 	{
@@ -196,7 +201,29 @@ public:
 	//not sure how to overload base class 
 	//void withdrawals(double _withdrawalAmount) override
 	//{
-	//
+	//if(((Account: getBalance()) - _withdrawalAmount) > 0 )
+	// {
+	//  double temp;
+	//  temp = getBalance() - _withdrawalAmount 
+	//  setBalance(temp)
+	//	withdrawals++
+	//  cout << "Your inputted amount has been withdrawn... " << endl;
+	//  cout << "Your new balance is $" << temp << endl;
+ 	// }
+	// else if(((Account: getBalance()) - _withdrawalAmount) < 0 && ((Account: getBalance()) - _withdrawalAmount) >= (0 - overDraftLimit)
+	// {
+	//  double temp;
+	//  temp = getBalance() - (_withdrawalAmount + 20);
+	//  setBalance(temp);
+	//  withdrawals++
+	//  cout << "Your inputted amount has been withdrawn but a $20 service fee has been charged
+	//			 to your account for overdraft protection." << endl;
+	// }
+	// else
+	// {
+	// cout << "You have tried to withdraw more than your over draft limit allows you to." << endl;
+	// cout << "Please try again." << endl;
+	// }
 	//}
 };
 
@@ -217,9 +244,11 @@ public:
 	double payInterest()
 	{
 		//somehow get that balance from Account 
+		// 
 		//double interest = interestRate * Account:getBalance();
 	}
 };
+//
 
 class menu : public Account
 {
@@ -305,35 +334,58 @@ class createAccount : public Account
 		//acc->PrintInfo();
 		//delete acc;
 	}
+	
 };
 
 int main()
 {
-	char option;
-	cout << "Log in (L) or Create account (C)";
+	int option;
+	cout << "1. Log in " << endl;
+	cout << "2. Create account" << endl;
 	//using files????
 	// we can add accounts username and password to save account information 
 	cin >> option;
-	if (option != 'L', 'C', 'c', 'l')
+	if (option != 1 || 2)
 	{
 		cout << "Not a valid option" << endl;
 		cout << "Log in (L) or Create account (C)";
 	}
-	else if (option == 'L', 'l')
+	else if (option == 1)
 	{
-		//create class to log in
+		//create class to log in (inherate from account)
 	}
-	else if (option == 'c', 'C')
+	else if (option == 2)
 	{
 		//create class to create accputn 
 	}
 
 	//create menu or call menu 
-	// 1. select account 
-	// 2. exit
+	cout << "1. Select Saving Account"<< endl;
+	cout << "2. Select Checking Account"<< endl;
+	cout << "3. Exit"<< endl;
+	cin >> option;
+	
+	if (option == 1)
+	{
+		//call saving account
+	
+		//deposit, withdraw, edit info, view account
+	}
+	else if (option == 2)
+	{
+		//call checking
+	}
+	else if (option == 3)
+	{
+		//exits
+		cout << "Thank you" << endl;
+		return 0;
+	}
+	else 
+	{
+		cout << "invalid option" << endl;
+	}
 
-	//depending on the account
-	//deposit, withdraw, edit info, view account
 
 	system("Pause");
 	return 0;
