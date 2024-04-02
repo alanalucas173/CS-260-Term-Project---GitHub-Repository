@@ -1,5 +1,6 @@
 #include<iostream>
 #include<string>
+#include <fstream>
 
 using namespace std;
 
@@ -334,6 +335,24 @@ class createAccount : public Account
 		//acc->PrintInfo();
 		//delete acc;
 	}
+	//creates a username and password
+	 void registerUser(const string& username, const string& password) {
+   		 // Save to file (username.txt)
+    		string filename = username + ".txt";
+    		ofstream file(filename);
+    		file << password << "\n";  // Save the password directly
+    		file.close();
+
+    cout << "User registered successfully!" << endl;
+}
+	// password and user for login
+	bool validateLogin(const string& username, const string& password) {
+    		string filename = username + ".txt";
+   		 ifstream file(filename);
+    		if (!file) {
+       			 cout << "User not found." << endl;
+        		return false;
+   			 }
 	
 };
 
@@ -353,10 +372,27 @@ int main()
 	else if (option == 1)
 	{
 		//create class to log in (inherate from account)
+		string storedPassword;
+    		getline(file, storedPassword);
+
+   		 if (password == storedPassword) {
+        	cout << "Login successful!" << endl;
+       		 return true;
+    		} else {
+        	cout << "Invalid credentials." << endl;
+        	return false;
+    }
 	}
 	else if (option == 2)
 	{
 		//create class to create accputn 
+		string username, password;
+    		cout << "Enter username: ";
+    		cin >> username;
+    		cout << "Enter password: ";
+    		cin >> password;
+
+    registerUser(username, password)
 	}
 
 	//create menu or call menu 
@@ -364,16 +400,19 @@ int main()
 	cout << "2. Select Checking Account"<< endl;
 	cout << "3. Exit"<< endl;
 	cin >> option;
-	
+
+	//either create options to select saving withdraw or cheicking or create a do while to display  
 	if (option == 1)
 	{
 		//call saving account
-	
-		//deposit, withdraw, edit info, view account
+		// create menu with options 
+		//deposit, withdraw, view account,  
 	}
 	else if (option == 2)
 	{
 		//call checking
+		// create menu with options 
+		//deposit, withdraw, view account
 	}
 	else if (option == 3)
 	{
