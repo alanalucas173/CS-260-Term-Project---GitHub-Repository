@@ -1,7 +1,8 @@
-#include<iostream>
-#include<string>
+#include <iostream>
+#include <string>
 #include <fstream>
 #include <iomanip>
+#include <cctype>
 
 using namespace std;
 
@@ -19,7 +20,7 @@ public:
 		email = "";
 		phone = "";
 	}
-	Customer(string _fname, string _lname, string _address, string _email, double _phone)
+	Customer(string _fname, string _lname, string _address, string _email, string _phone)
 	{
 		fname = _fname;
 		lname = _lname;
@@ -27,7 +28,7 @@ public:
 		email = _email;
 		phone = _phone;
 	}
-	void setCustomer(string _fname, string _lname, string _address, string _email, double _phone)
+	void setCustomer(string _fname, string _lname, string _address, string _email, string _phone)
 	{
 		fname = _fname;
 		lname = _lname;
@@ -56,27 +57,37 @@ public:
 	}
 	bool isValidPhone(string _phone)
 	{
-		string allowChars = "0123456789";
-		return true;
 		if (_phone.length() == 10)
-			for (int i = 0; i < _phone.length(); i++)
-			{
+		{
+			if (_phone.length() != 10)
+				return false;
 
+			// Check if all characters in the string are digits
+			for (char digit : _phone) {
+				if (!isdigit(digit))
+					return false;
 			}
+
+			// If all conditions pass, the phone number is valid
 			return true;
-		else;
-		return false;
+		}
+		else
+		{
+			return false;
+		}
 	}
-	void setPhone(double _phone)
+	void setPhone(string _phone)
 	{
-		if (_phone >= 0)
+		bool valid = isValidPhone(_phone);
+		if (valid == true)
 		{
 			phone = _phone;
+			cout << "phone valid";
 		}
 		else
 		{
 			cout << "You did not enter a valid phone number, please try again and enter your 10 digit phone number." << endl;
-			cout << "=========================================================================================================" << endl << endl;
+			cout << "=========================================================================================================" << endl;
 		}
 	}
 
@@ -97,7 +108,7 @@ public:
 	{
 		return email;
 	}
-	double getPhone() const
+	string getPhone() const
 	{
 		return phone;
 	}
@@ -112,7 +123,6 @@ public:
 		cout << "Phone Number: " << phone << endl;
 	}
 };
-
 
 //makes an account(ID and balance) with the customers information
 //also withdraw and deposit 
@@ -136,20 +146,65 @@ public:
 
 	Account(string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance) : Customer(_fname, _lname, _address, _email, _phone)
 	{
-		ID = _ID;
+		if(isdigit(_ID) && _ID > 0)
+			ID = _ID;
+		else
+		{
+			while (isalpha(_ID) || _ID <= 0)
+			{
+				cout << "You have entered an invalid character or number for ID number. Please enter a new ID number: ";
+				cin >> _ID;
+			}
+		}
+		if(isdigit(_balance) && _balance > 0)
 		balance = _balance;
+		else
+		{
+			while (isalpha(_balance) || _balance <= 0)
+			{
+				cout << "You have entered an invalid character or number for ID number. Please enter a new ID number: ";
+				cin >> _balance;
+			}
+		}
 		//accountCustomer.setCustomer() idr how to do this
 	}
 	//setter
 	void setAccount(string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance)
 	{
 		setCustomer(_fname, _lname, _address, _email, _phone);
-		ID = _ID;
-		balance = _balance;
+		if (isdigit(_ID) && _ID > 0)
+			ID = _ID;
+		else
+		{
+			while (isalpha(_ID) || _ID <= 0)
+			{
+				cout << "You have entered an invalid character or number for ID number. Please enter a new ID number: ";
+				cin >> _ID;
+			}
+		}
+		if (isdigit(_balance) && _balance > 0)
+			balance = _balance;
+		else
+		{
+			while (isalpha(_balance) || _balance <= 0)
+			{
+				cout << "You have entered an invalid character or number for ID number. Please enter a new ID number: ";
+				cin >> _balance;
+			}
+		}
 	}
 	void setBalance(double _balance)
 	{
-		balance = _balance;
+		if (isdigit(_balance) && _balance > 0)
+			balance = _balance;
+		else
+		{
+			while (isalpha(_balance) || _balance <= 0)
+			{
+				cout << "You have entered an invalid character or number for ID number. Please enter a new ID number: ";
+				cin >> _balance;
+			}
+		}
 	}
 	//getter
 	double getBalance() const
@@ -202,7 +257,7 @@ public:
 		cout << "Name" << setw(20) << "Account ID Number" << setw(20) << "Balance" << setw(20) << "Withdrawwals" << setw(20) << "Deposits" << endl;
 		cout << getFname << " " << getLname << setw(20) << ID << setw(20) << balance << setw(20) << withdrawals << setw(20) << deposits << endl;
 	}
-	
+
 };
 //whats this for?
 int Account::withdrawals = 0;
@@ -212,7 +267,7 @@ int Account::deposits = 0;
 class CheckingAccount : public Account {
 private:
 	double overDraftLimit;
-	
+
 public:
 	CheckingAccount() :Account()
 	{
@@ -230,48 +285,48 @@ public:
 	//not sure how to overload base class 
 	void withdrawals(double _withdrawalAmount) override
 	{
-	if((getBalance()) < 0)
-	{
-		double temp;
-	    if(_withdrawalAmount > overDraftLimit)
+		if ((getBalance()) < 0)
 		{
-			cout << "You have tried to withdraw more then your over draft limit allows you to..." << endl;
+			double temp;
+			if (_withdrawalAmount > overDraftLimit)
+			{
+				cout << "You have tried to withdraw more then your over draft limit allows you to..." << endl;
+				cout << "Please try again!" << endl;
+			}
+			else
+			{
+				temp = overDraftLimit - _withdrawalAmount;
+				setBalance((getBalance()) - 20);
+			}
+		}
+		else if (_withdrawalAmount < 0)
+		{
+			cout << "You have tried to withdraw a negative amount. You can not do this..." << endl;
 			cout << "Please try again!" << endl;
+		}
+		else if (((getBalance()) - _withdrawalAmount) > 0)
+		{
+			double temp;
+			temp = getBalance() - _withdrawalAmount;
+			setBalance(temp);
+			withdrawals++;
+			cout << "Your inputted amount has been withdrawn... " << endl;
+			cout << "Your new balance is $" << temp << endl;
+		}
+		else if (((Account:: getBalance()) - _withdrawalAmount) < 0 && ((Account:: getBalance()) - _withdrawalAmount) >= (0 - overDraftLimit))
+		{
+			double temp;
+			temp = (overDraftLimit)+(getBalance() - (_withdrawalAmount));
+			setOverDraftLimit(temp);
+			setBalance((getBalance() - 20));
+			withdrawals++;
+			cout << "Your inputted amount has been withdrawn but a $20 service fee has been charged to your account for overdraft protection." << endl;
 		}
 		else
 		{
-			temp = overDraftLimit - _withdrawalAmount;
-			setBalance((getBalance())-20)
+			cout << "You have tried to withdraw more than your over draft limit allows you to." << endl;
+			cout << "Please try again." << endl;
 		}
-	}
-	else if(_withdrawalAmount < 0)
-	{
-		cout << "You have tried to withdraw a negative amount. You can not do this..." << endl;
-		cout << "Please try again!" << endl;
-	}
-	else if(((getBalance()) - _withdrawalAmount) > 0 )
-	 {
-	  double temp;
-	  temp = getBalance() - _withdrawalAmount; 
-	  setBalance(temp);
-  	  withdrawals++;
-	 cout << "Your inputted amount has been withdrawn... " << endl;
-	  cout << "Your new balance is $" << temp << endl;
-	 }
-	 else if(((Account: getBalance()) - _withdrawalAmount) < 0 && ((Account: getBalance()) - _withdrawalAmount) >= (0 - overDraftLimit))
-	 {
-	  double temp;
-	  temp = (overDraftLimit) + (getBalance() - (_withdrawalAmount));
-	  setOverDraftLimit(temp); 
-	  setBalance((getBalance() - 20));
-	  withdrawals++;
-	  cout << "Your inputted amount has been withdrawn but a $20 service fee has been charged to your account for overdraft protection." << endl;
-	 }
-	 else
-	 {
-	 cout << "You have tried to withdraw more than your over draft limit allows you to." << endl;
-	 cout << "Please try again." << endl;
-	 }
 	}
 };
 
@@ -401,18 +456,18 @@ class createAccount : public Account
 			return false;
 		}
 
-	};
-
+	}
+};
 	int main()
 	{
 		//string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance
 		// array for number of accounts 
 		Account account[20];
-		
+
 		//Account account("alana", "lucas", "3547 Shres Dr", "alana@gmail", 9045984902, 1, 100);
 		//hard code an account
 		account[0].setAccount("alana", "lucas", "3547 Shres Dr", "alana@gmail", 9045984902, 1, 100);
-
+		account[1].setAccount("maximus", "adversalo", "736 Killebrew Way", "adversalom@gmail", 9165450572, 2, 1000);
 
 		int option;
 		cout << "1. Log in " << endl;
@@ -429,7 +484,7 @@ class createAccount : public Account
 		{
 			//create class to log in (inherate from account)
 			string storedPassword, password;
-			cin >> getline(file, storedPassword);
+			getline(cin, storedPassword);
 
 			if (password == storedPassword) {
 				cout << "Login successful!" << endl;
@@ -485,4 +540,5 @@ class createAccount : public Account
 
 		system("Pause");
 		return 0;
+
 	}
