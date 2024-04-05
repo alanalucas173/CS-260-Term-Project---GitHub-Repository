@@ -8,8 +8,7 @@ using namespace std;
 //This takes customer information (name, address, email, phone)
 class Customer {
 private:
-	string fname, lname, address, email;
-	double phone;
+	string fname, lname, address, email, phone;
 public:
 	//default
 	Customer()
@@ -18,7 +17,7 @@ public:
 		lname = "";
 		address = "";
 		email = "";
-		phone = 0;
+		phone = "";
 	}
 	Customer(string _fname, string _lname, string _address, string _email, double _phone)
 	{
@@ -54,6 +53,19 @@ public:
 	void setEmail(string _email)
 	{
 		email = _email;
+	}
+	bool isValidPhone(string _phone)
+	{
+		string allowChars = "0123456789";
+		return true;
+		if (_phone.length() == 10)
+			for (int i = 0; i < _phone.length(); i++)
+			{
+
+			}
+			return true;
+		else;
+		return false;
 	}
 	void setPhone(double _phone)
 	{
@@ -100,6 +112,7 @@ public:
 		cout << "Phone Number: " << phone << endl;
 	}
 };
+
 
 //makes an account(ID and balance) with the customers information
 //also withdraw and deposit 
