@@ -9,8 +9,7 @@ using namespace std;
 //This takes customer information (name, address, email, phone)
 class Customer {
 private:
-	string fname, lname, address, email;
-	double phone;
+	string fname, lname, address, email, phone;
 public:
 	//default
 	Customer()
@@ -19,9 +18,9 @@ public:
 		lname = "";
 		address = "";
 		email = "";
-		phone = 0;
+		phone = "";
 	}
-	Customer(string _fname, string _lname, string _address, string _email, double _phone)
+	Customer(string _fname, string _lname, string _address, string _email, string _phone)
 	{
 		fname = _fname;
 		lname = _lname;
@@ -29,7 +28,7 @@ public:
 		email = _email;
 		phone = _phone;
 	}
-	void setCustomer(string _fname, string _lname, string _address, string _email, double _phone)
+	void setCustomer(string _fname, string _lname, string _address, string _email, string _phone)
 	{
 		fname = _fname;
 		lname = _lname;
@@ -56,16 +55,39 @@ public:
 	{
 		email = _email;
 	}
-	void setPhone(double _phone)
+	bool isValidPhone(string _phone)
 	{
-		if (_phone >= 0)
+		if (_phone.length() == 10)
+		{
+			if (_phone.length() != 10)
+				return false;
+
+			// Check if all characters in the string are digits
+			for (char digit : _phone) {
+				if (!isdigit(digit))
+					return false;
+			}
+
+			// If all conditions pass, the phone number is valid
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	void setPhone(string _phone)
+	{
+		bool valid = isValidPhone(_phone);
+		if (valid == true)
 		{
 			phone = _phone;
+			cout << "phone valid";
 		}
 		else
 		{
 			cout << "You did not enter a valid phone number, please try again and enter your 10 digit phone number." << endl;
-			cout << "=========================================================================================================" << endl << endl;
+			cout << "=========================================================================================================" << endl;
 		}
 	}
 
@@ -86,7 +108,7 @@ public:
 	{
 		return email;
 	}
-	double getPhone() const
+	string getPhone() const
 	{
 		return phone;
 	}
