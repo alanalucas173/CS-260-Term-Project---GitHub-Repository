@@ -57,23 +57,22 @@ public:
 	}
 	bool isValidPhone(string _phone)
 	{
-		if (_phone.length() == 10)
+		// Check if all characters in the string are digits
+		for (char digit : _phone) 
 		{
-			if (_phone.length() != 10)
+			if (!isdigit(digit))
+			{
 				return false;
-
-			// Check if all characters in the string are digits
-			for (char digit : _phone) {
-				if (!isdigit(digit))
-					return false;
 			}
-
-			// If all conditions pass, the phone number is valid
-			return true;
+		}
+		//checks length 
+		if (_phone.length() != 10)
+		{
+			return false;
 		}
 		else
 		{
-			return false;
+			return true;
 		}
 	}
 	void setPhone(string _phone)
@@ -86,8 +85,14 @@ public:
 		}
 		else
 		{
-			cout << "You did not enter a valid phone number, please try again and enter your 10 digit phone number." << endl;
-			cout << "=========================================================================================================" << endl;
+			while (valid != true) 
+			{
+				cout << "You did not enter a valid phone number, please try again and enter your 10 digit phone number without - or ()." << endl;
+				cout << "Enter phone number: ";
+				cin >> _phone;
+				valid = isValidPhone(_phone);
+			}
+			phone = _phone;
 		}
 	}
 
