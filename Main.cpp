@@ -58,7 +58,7 @@ public:
 	bool isValidPhone(string _phone)
 	{
 		// Check if all characters in the string are digits
-		for (char digit : _phone) 
+		for (char digit : _phone)
 		{
 			if (!isdigit(digit))
 			{
@@ -85,7 +85,7 @@ public:
 		}
 		else
 		{
-			while (valid != true) 
+			while (valid != true)
 			{
 				cout << "You did not enter a valid phone number, please try again and enter your 10 digit phone number without - or ()." << endl;
 				cout << "Enter phone number: ";
@@ -149,34 +149,22 @@ public:
 		balance = 0;
 	}
 
-	Account(string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance) : Customer(_fname, _lname, _address, _email, _phone)
+	Account(string _fname, string _lname, string _address, string _email, string _phone, int _ID, double _balance)
 	{
-		if(isdigit(_ID) && _ID > 0)
-			ID = _ID;
-		else
-		{
-			while (isalpha(_ID) || _ID <= 0)
-			{
-				cout << "You have entered an invalid character or number for ID number. Please enter a new ID number: ";
-				cin >> _ID;
-			}
-		}
-		if(isdigit(_balance) && _balance > 0)
-		balance = _balance;
-		else
-		{
-			while (isalpha(_balance) || _balance <= 0)
-			{
-				cout << "You have entered an invalid character or number for ID number. Please enter a new ID number: ";
-				cin >> _balance;
-			}
-		}
+		setCustomer(_fname, _lname, _address, _email, _phone);
+		setID(_ID);
+		setBalance(_balance);
 		//accountCustomer.setCustomer() idr how to do this
 	}
 	//setter
-	void setAccount(string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance)
+	void setAccount(string _fname, string _lname, string _address, string _email, string _phone, int _ID, double _balance)
 	{
 		setCustomer(_fname, _lname, _address, _email, _phone);
+		setID(_ID);
+		setBalance(_balance);
+	}
+	void setID(int _ID)
+	{
 		if (isdigit(_ID) && _ID > 0)
 			ID = _ID;
 		else
@@ -186,29 +174,23 @@ public:
 				cout << "You have entered an invalid character or number for ID number. Please enter a new ID number: ";
 				cin >> _ID;
 			}
-		}
-		if (isdigit(_balance) && _balance > 0)
-			balance = _balance;
-		else
-		{
-			while (isalpha(_balance) || _balance <= 0)
-			{
-				cout << "You have entered an invalid character or number for ID number. Please enter a new ID number: ";
-				cin >> _balance;
-			}
+			ID = _ID;
 		}
 	}
 	void setBalance(double _balance)
 	{
 		if (isdigit(_balance) && _balance > 0)
+		{
 			balance = _balance;
+		}
 		else
 		{
-			while (isalpha(_balance) || _balance <= 0)
+			while ((isalpha(_balance)) || (_balance <= 0))
 			{
-				cout << "You have entered an invalid character or number for ID number. Please enter a new ID number: ";
+				cout << "You have entered an invalid character or number for balance. Please enter a new balance: ";
 				cin >> _balance;
 			}
+			balance = _balance;
 		}
 	}
 	//getter
@@ -257,13 +239,20 @@ public:
 	}
 	void printInfo()
 	{
-	Customer: printInfo();
-
-		cout << "Name" << setw(20) << "Account ID Number" << setw(20) << "Balance" << setw(20) << "Withdrawwals" << setw(20) << "Deposits" << endl;
-		cout << getFname << " " << getLname << setw(20) << ID << setw(20) << balance << setw(20) << withdrawals << setw(20) << deposits << endl;
+		cout << "Name" << setw(20) << "Account ID Number" << setw(20) << "Balance" << endl;
+		cout << getFname() << setw(20) << ID << setw(20) << balance << endl;
 	}
 
 };
+
+int main()
+{
+	Account a1("Alana", "Lucas", "3468", "alucas1@gmail", "9045984902", 1, 1000);
+	a1.printInfo();
+
+	system("pause");
+	return 0;
+}
 //whats this for?
 int Account::withdrawals = 0;
 int Account::deposits = 0;
