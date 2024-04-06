@@ -245,14 +245,6 @@ public:
 
 };
 
-int main()
-{
-	Account a1("Alana", "Lucas", "3468", "alucas1@gmail", "9045984902", 1, 1000);
-	a1.printInfo();
-
-	system("pause");
-	return 0;
-}
 //whats this for?
 int Account::withdrawals = 0;
 int Account::deposits = 0;
