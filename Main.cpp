@@ -4,7 +4,24 @@
 #include <iomanip>
 #include <cctype>
 #include <ostream>
+#include<ctime>
 using namespace std;
+
+bool validatePhone(string ph)
+{
+	bool valid = true;
+	if (ph.length() != 10)
+		return false;
+	for (int i = 0; i < ph.length(); i++)
+	{
+		if (ph[i] < '0' || ph[i] > '9')
+		{
+			return false;
+		}
+		break;
+	}
+	return valid;
+}
 
 //This takes customer information (name, address, email, phone)
 class Customer {
@@ -26,6 +43,12 @@ public:
 		lname = _lname;
 		address = _address;
 		email = _email;
+		while (validatePhone(_phone) == false)
+		{
+			cout << "Invalid Phone number please try again." << endl;
+			cout << "Please enter your phone number: ";
+			cin >> _phone;
+		}
 		phone = _phone;
 	}
 	void setCustomer(string _fname, string _lname, string _address, string _email, string _phone)
@@ -34,6 +57,12 @@ public:
 		lname = _lname;
 		address = _address;
 		email = _email;
+		while (validatePhone(_phone) == false)
+		{
+			cout << "Invalid Phone number please try again." << endl;
+			cout << "Please enter your phone number: ";
+			cin >> _phone;
+		}
 		phone = _phone;
 	}
 
@@ -57,23 +86,12 @@ public:
 	}
 	bool isValidPhone(string _phone)
 	{
-		// Check if all characters in the string are digits
-		for (char digit : _phone)
-		{
-			if (!isdigit(digit))
-			{
-				return false;
-			}
-		}
-		//checks length 
-		if (_phone.length() != 10)
+		if (validatePhone(_phone) == false)
 		{
 			return false;
 		}
 		else
-		{
 			return true;
-		}
 	}
 	void setPhone(string _phone)
 	{
@@ -137,7 +155,7 @@ public:
 		cout << "Enter Address: ";
 		cin.ignore();
 		getline(cin, address);
-		cout << "Enter Email: " ;
+		cout << "Enter Email: ";
 		cin >> email;
 		cout << "Enter Phone Number: ";
 		cin >> phone;
@@ -151,7 +169,7 @@ class Account : public Customer {
 private:
 	int ID;
 	double balance;
-	
+
 protected:
 	Customer accountCustomer;
 
@@ -181,6 +199,7 @@ public:
 	}
 	void setID(int _ID)
 	{
+		/*
 		if (isdigit(_ID) && _ID > 0)
 			ID = _ID;
 		else
@@ -192,6 +211,10 @@ public:
 			}
 			ID = _ID;
 		}
+		*/
+		srand(time(nullptr));
+		int randomNumber = rand() % 90000 + 1000; //generates random 5 digin number between 10000 and 99999
+		ID = randomNumber;
 	}
 	void setBalance(double _balance)
 	{
@@ -212,7 +235,7 @@ public:
 	//Overloader
 	Account operator++() //post-fix
 	{
-		
+
 		withdrawals++;
 		return *this;
 	}
@@ -274,12 +297,13 @@ public:
 		cout << getFname() << setw(20) << getID() << setw(20) << getBalance() << endl;
 	}
 
-	
+
 };
 
 class CheckingAccount : public Account {
 private:
 	double overDraftLimit;
+
 public:
 	CheckingAccount() :Account()
 	{
@@ -341,6 +365,24 @@ public:
 			cout << "Please try again." << endl;
 		}
 	}
+	void depositChecking()
+	{
+		double depositAmmount = 0;
+		cout << "Your current balance is: $" << Account::getBalance() << endl;
+		cout << "Please eneter how much you would like to deposit into your account: $";
+		cin >> depositAmmount;
+		if (depositAmmount >= 0)
+		{
+			Account::setBalance(Account::getBalance() + depositAmmount);
+			cout << "Your deposit has been added..." << endl;
+			cout << "Your new balance is: $" << getBalance() << endl;
+		}
+		else
+		{
+			cout << "You have inputted an invalid deposit ammount. This will not be added to your Checking Account." << endl;
+			cout << "Please try again!" << endl;
+		}
+	}
 };
 
 class SavingAccount : public Account {
@@ -364,6 +406,24 @@ public:
 			return;
 		}
 	}
+	void depositSaving()
+	{
+		double depositAmmount = 0;
+		cout << "Your current balance is: $" << Account::getBalance() << endl;
+		cout << "Please eneter how much you would like to deposit into your Savings account: $";
+		cin >> depositAmmount;
+		if (depositAmmount >= 0)
+		{
+			Account::setBalance(getBalance() + depositAmmount);
+			cout << "Your deposit has been added..." << endl;
+			cout << "Your new balance is: $" << Account::getBalance() << endl;
+		}
+		else
+		{
+			cout << "You have inputted an invalid deposit ammount. This will not be added to your Checking Account." << endl;
+			cout << "Please try again!" << endl;
+		}
+	}
 	double payInterest()
 	{
 		double interest = interestRate * Account::getBalance();
@@ -375,6 +435,48 @@ public:
 	}
 };
 
+class LogIn : public Account
+{
+private:
+	string userName, password;
+public:
+	LogIn() : Account()
+	{
+		userName = "";
+		password = "";
+	}
+	LogIn(string _fname, string _lname, string _address, string _email, string _phone, int _ID, double _balance, string _userName, string _password) : Account(_fname, _lname, _address, _email, _phone, _ID, _balance)
+	{
+		userName = _userName;
+		password = _password;
+	}
+	void registerUser(string _userName, string _password)
+	{
+		string _fname, _lname, _address, _email, _phone;
+		double _balance = 0;
+		int _ID = 0;
+		userName = _userName;
+		password = _password;
+		cout << "Your username and password have been created. We only need a few more things from you to complete your account set-up." << endl;
+		cout << "Enter First Name: ";
+		cin >> _fname;
+		cout << "Enter Last Name: ";
+		cin >> _lname;
+		cout << "Enter Address: ";
+		cin.ignore();
+		getline(cin, _address);
+		cout << "Enter Email: ";
+		cin >> _email;
+		cout << "Enter Phone Number: ";
+		cin >> _phone;
+		setCustomer(_fname, _lname, _address, _email, _phone);
+		setID(_ID);
+		setBalance(_balance);
+		cout << "Your acccount has successfully been created!" << endl;
+	}
+
+};
+/*
 class menus : public Account
 {
 public:
@@ -409,7 +511,7 @@ public:
 		}
 		else if (option == 2)
 		{
-			//create class to create accputn 
+			//create class to create accputn
 			cout << "Enter username: ";
 			cin >> username;
 			cout << "Enter password: ";
@@ -424,79 +526,79 @@ public:
 		cout << "Please enter a number decision according to where you would like to me navigated within your savings menu: " << endl;
 		cout << "1. Deposit" << endl << "2. Withdraw" << endl << "3. View Account" << endl << "4. Exit" << end;
 		cin >> input;
-			if (input == 1)
-			{
-				double depositAmmount;
-				cout << "You have chosen :DEPOSIT:" << endl;
-				cout << "Please enter how much you would like to deposit: $";
-				cin >> depositAmmount;
-				savingsAccount[i].deposit(depositAmmount); //still needs to figure out what account number so that correct account is pullled up
-			}
-			else if (input == 2)
-			{
-				double withdrawlAmmount;
-				cout << "You have chosen :WITHDRAW:" << endl;
-				cout << "PLease enter how much you would like to withdraw: $";
-				cin >> withdrawlAmmount;
-				savingsAccount[i].withdraw(withdrawlAmmount);
-			}
-			else if(input == 3)
-			{
-				SavingAccount::savingsAccount.printInfo();
-			}
-			else if(input == 4)
-			{
-				cout << "You have chosen :EXIT:" << endl;
-				cout << "Your account has been locked, thank you for banking with us today!" << endl;
-			}
-			else
-			{
-				cout << "You have entered an invalid entry, please try again later..." << endl;
-			}
+		if (input == 1)
+		{
+			double depositAmmount;
+			cout << "You have chosen :DEPOSIT:" << endl;
+			cout << "Please enter how much you would like to deposit: $";
+			cin >> depositAmmount;
+			savingsAccount[i].deposit(depositAmmount); //still needs to figure out what account number so that correct account is pullled up
+		}
+		else if (input == 2)
+		{
+			double withdrawlAmmount;
+			cout << "You have chosen :WITHDRAW:" << endl;
+			cout << "PLease enter how much you would like to withdraw: $";
+			cin >> withdrawlAmmount;
+			savingsAccount[i].withdraw(withdrawlAmmount);
+		}
+		else if (input == 3)
+		{
+			SavingAccount::savingsAccount.printInfo();
+		}
+		else if (input == 4)
+		{
+			cout << "You have chosen :EXIT:" << endl;
+			cout << "Your account has been locked, thank you for banking with us today!" << endl;
+		}
+		else
+		{
+			cout << "You have entered an invalid entry, please try again later..." << endl;
+		}
 	}
 	void checkingMenu()
 	{
 		int input;
 		cout << "Please enter a number decision according to where you would like to me navigated within your checking menu: " << endl;
 		cout << "1. Deposit" << endl << "2. Withdraw" << endl << "3. View Account" << endl << "4. Exit" << end;
-		cin >> input;	
-			if (input == 1)
-			{
-				double depositAmmount;
-				cout << "You have chosen :DEPOSIT:" << endl;
-				cout << "Please enter how much you would like to deposit: $";
-				cin >> depositAmmount;
-				CheckingAccount[i].deposit(depositAmmount); //still needs to figure out what account number so that correct account is pullled up
-			}
-			else if (input == 2)
-			{
-				double withdrawlAmmount;
-				cout << "You have chosen :WITHDRAW:" << endl;
-				cout << "PLease enter how much you would like to withdraw: $";
-				cin >> withdrawlAmmount;
-				checkingAccount[i].withdraw(withdrawlAmmount);
-			}
-			else if(input == 3)
-			{
-				CheckingAccount::checkingAccount.printInfo();
-			}
-			else if(input == 4)
-			{
-				cout << "You have chosen :EXIT:" << endl;
-				cout << "Your account has been locked, thank you for banking with us today!" << endl;
-			}
-			else
-			{
-				cout << "You have entered an invalid entry, please try again later..." << endl;
-			
-			}
+		cin >> input;
+		if (input == 1)
+		{
+			double depositAmmount;
+			cout << "You have chosen :DEPOSIT:" << endl;
+			cout << "Please enter how much you would like to deposit: $";
+			cin >> depositAmmount;
+			CheckingAccount[i].deposit(depositAmmount); //still needs to figure out what account number so that correct account is pullled up
+		}
+		else if (input == 2)
+		{
+			double withdrawlAmmount;
+			cout << "You have chosen :WITHDRAW:" << endl;
+			cout << "PLease enter how much you would like to withdraw: $";
+			cin >> withdrawlAmmount;
+			CheckingAccount[i].withdraw(withdrawlAmmount);
+		}
+		else if (input == 3)
+		{
+			CheckingAccount::checkingAccount.printInfo();
+		}
+		else if (input == 4)
+		{
+			cout << "You have chosen :EXIT:" << endl;
+			cout << "Your account has been locked, thank you for banking with us today!" << endl;
+		}
+		else
+		{
+			cout << "You have entered an invalid entry, please try again later..." << endl;
+
+		}
 	}
 
 	void displayMenu()
 	{
 		int input;
 		cout << "Please choose from the following options:" << endl;
-		cout << "1. Checking" << endl << "2. Saving" << endl << "3. Edit Account Info" << 
+		cout << "1. Checking" << endl << "2. Saving" << endl << "3. Edit Account Info" <<
 			endl << "4. View Account Info" << endl << "5*.Close Account " <<
 			endl << "Press any other number to exit" << endl;
 		cin >> input;
@@ -514,7 +616,7 @@ public:
 		}
 		else if (input == 2)
 		{
-			// call saving menu 
+			// call saving menu
 		}
 		else if (input == 3)
 		{
@@ -522,7 +624,7 @@ public:
 		}
 		else if (input == 4)
 		{
-			// call to print info 
+			// call to print info
 		}
 		else if (input == 5)
 		{
@@ -622,24 +724,183 @@ class createAccount : public Account
 		ifstream file(filename);
 		if (!file) {
 			cout << "User not found." << endl;
-	Accountn false;
-ASasavAccount		}
+			Account false;
+			ASasavAccount
+		}
 
 	}
 };
-iaccount()
-.setAccountsetsaccountnttes.{
+Account::setsaccount(){
 	//string _fname, string _lname, string _address, string _email, double _phone, int _ID, double _balance
-	// array for number of accounts 
+	// array for number of accounts
 	int size = 2;
 	Account* account = new Account[size];
-}	
-
-	
-
-	system("Pause");
-	return 0;
 }
+*/
+int main()
+{
+	//system("cls")
+	int size = 3;
+	int i = 0;
+	int* account = new int[size];
+	int* checkingAccounts = new int[size];
+	int* savingAccounts = new int[size];
+	LogIn a1[3];
+	SavingAccount saving[3];
+	CheckingAccount checking[3];
+
+	int option;
+	cout << "Welcome " << endl;
+	cout << "1. Log in " << endl << "2. Create account" << endl;
+	cin >> option;
+	while (cin.fail())
+	{
+		cin.clear();
+		cin.ignore();
+		cout << "Not valid, Try again ";
+		cin >> option;
+	}
+	if (option == 1)
+	{
+		//create class to log in (inherate from account)
+		string storedPassword, password;
+		getline(cin, storedPassword);
+
+		if (password == storedPassword)
+		{
+			cout << "Login successful!" << endl;
+			//return true;
+		}
+		else
+		{
+			cout << "Invalid credentials." << endl;
+			//return false;
+		}
+	}
+	else if (option == 2)
+	{
+		a1[i];
+		string username, password;
+		//create class to create accputn 
+		cout << "Enter username: ";
+		cin >> username;
+		cout << "Enter password: ";
+		cin >> password;
+		size++;
+		a1[i].registerUser(username, password);
+		//logIn.registerUser(username, password);
+	}
+
+	int input;
+	cout << "Please enter a number decision according to where you would like to me navigated within your savings menu: " << endl;
+	cout << "1. Deposit" << endl << "" << endl << "3. View Account" << endl << "4. Exit" << endl;
+	cin >> input;
+	if (input == 1)
+	{
+		double depositAmmount;
+		cout << "You have chosen :DEPOSIT:" << endl;
+		cout << "Please enter how much you would like to deposit: $";
+		cin >> depositAmmount;
+		saving[i].depositSaving();
+		//SavingAccount::depositSaving(depositAmmount); //still needs to figure out what account number so that correct account is pullled up
+	}
+	else if (input == 2)
+	{
+
+	}
+	else if (input == 3)
+	{
+		//SavingAccount::savingsAccount.printInfo();
+		saving[i].printInfo();
+	}
+	else if (input == 4)
+	{
+		cout << "You have chosen :EXIT:" << endl;
+		cout << "Your account has been locked, thank you for banking with us today!" << endl;
+	}
+	else
+	{
+		cout << "You have entered an invalid entry, please try again later..." << endl;
+	}
+
+	//int input;
+	cout << "Please enter a number decision according to where you would like to me navigated within your checking menu: " << endl;
+	cout << "1. Deposit" << endl << "2. Withdraw" << endl << "3. View Account" << endl << "4. Exit" << endl;
+	cin >> input;
+	if (input == 1)
+	{
+		double depositAmmount;
+		cout << "You have chosen :DEPOSIT:" << endl;
+		cout << "Please enter how much you would like to deposit: $";
+		cin >> depositAmmount;
+		checking[i].deposit(depositAmmount);
+		//CheckingAccount[i].deposit(depositAmmount); //still needs to figure out what account number so that correct account is pullled up
+	}
+	else if (input == 2)
+	{
+		double withdrawlAmmount;
+		cout << "You have chosen :WITHDRAW:" << endl;
+		cout << "PLease enter how much you would like to withdraw: $";
+		cin >> withdrawlAmmount;
+		checking[i].withdrawal(withdrawlAmmount);
+		//CheckingAccount[i].withdraw(withdrawlAmmount);
+	}
+	else if (input == 3)
+	{
+		checking[i].printInfo();
+		//CheckingAccount::checkingAccount.printInfo();
+	}
+	else if (input == 4)
+	{
+		cout << "You have chosen :EXIT:" << endl;
+		cout << "Your account has been locked, thank you for banking with us today!" << endl;
+	}
+	else
+	{
+		cout << "You have entered an invalid entry, please try again later..." << endl;
+	}
+}
+
+//	int input;
+//	cout << "Please choose from the following options:" << endl;
+//	cout << "1. Checking" << endl << "2. Saving" << endl << "3. Edit Account Info" <<
+//		endl << "4. View Account Info" << endl << "5*.Close Account " <<
+//		endl << "Press any other number to exit" << endl;
+//	cin >> input;
+//	while (cin.fail())
+//	{
+//		cin.clear();
+//		cin.ignore();
+//		cout << "Not valid, Try again ";
+//		cin >> input;
+//	}
+//
+//	if (input == 1)
+//	{
+//		// call checking menu
+//	}
+//	else if (input == 2)
+//	{
+//		// call saving menu 
+//	}
+//	else if (input == 3)
+//	{
+//		// call to edit info
+//	}
+//	else if (input == 4)
+//	{
+//		// call to print info 
+//	}
+//	else if (input == 5)
+//	{
+//		// call to set account info to 0
+//	}
+//	else
+//	{
+//		system("pause");
+//	}
+//	return 0;
+//}
 
 //
 //int main()
