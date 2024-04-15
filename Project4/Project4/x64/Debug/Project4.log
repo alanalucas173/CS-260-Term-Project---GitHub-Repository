@@ -1,0 +1,4 @@
+﻿  Account.cpp
+C:\Users\alucas1\source\repos\Project4\Project4\Account.cpp(32,14): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\alucas1\source\repos\Project4\Project4\Account.cpp(38,19): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Project4.vcxproj -> C:\Users\alucas1\source\repos\Project4\x64\Debug\Project4.exe
